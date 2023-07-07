@@ -5,7 +5,7 @@ function InspectBlocks()
         return "front"
     end
     hasBlock, itemTable = turtle.inspectUp()
-    if hasBlock and itemTable["name"] == "minecraft:spruce_log" then
+    if hasBlock and itemTable["name"] == "minecraft:spruce_log"  or itemTable["name"] == "minecraft:spruce_leaves" then
         turtle.digUp()
         return "up"
     end
