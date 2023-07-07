@@ -1,35 +1,43 @@
-function TurnAndCheck()
-    for i = 1, 5, 1 do
-        if turtle.detect() then
-            return
-        end
-        turtle.turnLeft()
-    end
-    if turtle.detectUp() then
-        return
-    end
-    return nil
-end
-
 function InspectBlocks()
     local hasBlock, itemTable = turtle.inspect()
     if hasBlock and itemTable["name"] == "minecraft:spruce_log" then
         turtle.dig()
-        return true
+        return "front"
     end
     hasBlock, itemTable = turtle.inspectUp()
     if hasBlock and itemTable["name"] == "minecraft:spruce_log" then
         turtle.digUp()
-        return false
+        return "up"
+    end
+    hasBlock, itemTable = turtle.inspectDown()
+    if hasBlock and itemTable["name"] == "minecraft:spruce_log" then
+        turtle.digDown()
+        return "down"
     end
     return nil
 end
 
+function Turn()
+    for i = 1, 4, 1 do
+        local hasBlock, itemTable = turtle.inspect()
+        if hasBlock and itemTable["name"] == "minecraft:spruce_log" then
+            return
+        end
+        turtle.turnLeft()
+    end
+end
+
 while true do
-    TurnAndCheck()
-    if InspectBlocks() then
+    Turn()
+    local block = InspectBlocks()
+    if block == "front" then
         assert(turtle.forward(), "Bloqueo en el camino")
-    else
+    elseif block == "up" then
         assert(turtle.up(), "Bloqueo en el camino")
+    elseif block == "down" then
+        assert(turtle.down(), "Bloqueo en el camino")
+    elseif block == nil then
+        print("Final Del Arbol")
+        return
     end
 end
